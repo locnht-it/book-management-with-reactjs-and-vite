@@ -66,10 +66,16 @@ const deleteBookAPI = (id) => {
   return axios.delete(URL_BACKEND);
 };
 
+const fetchAllUserAPI = (current, pageSize) => {
+  const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
+  return axios.get(URL_BACKEND);
+};
+
 export {
   fetchAllBookAPI,
   handleUploadFileAPI,
   createBookAPI,
   updateBookAPI,
   deleteBookAPI,
+  fetchAllUserAPI,
 };
