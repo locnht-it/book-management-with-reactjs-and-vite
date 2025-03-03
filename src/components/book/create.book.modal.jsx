@@ -20,7 +20,7 @@ const CreateBookModal = (props) => {
 
   const handleOnChangeFile = (event) => {
     if (!event.target.files || event.target.files.length === 0) {
-      selectedFile(null);
+      setSelectedFile(null);
       setPreview(null);
       return;
     }
@@ -191,7 +191,7 @@ const CreateBookModal = (props) => {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span>Ảnh Thumbnail</span>
             <label
-              htmlFor="btnUpload"
+              htmlFor="btnUploadCreateBook"
               style={{
                 display: "block",
                 width: "fit-content",
@@ -207,7 +207,7 @@ const CreateBookModal = (props) => {
             <input
               type="file"
               hidden
-              id="btnUpload"
+              id="btnUploadCreateBook"
               onChange={(event) => handleOnChangeFile(event)}
               onClick={(event) => {
                 event.target.value = null;

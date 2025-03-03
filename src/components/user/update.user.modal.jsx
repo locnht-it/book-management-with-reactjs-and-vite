@@ -142,7 +142,7 @@ const UpdateUserModal = (props) => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span>Ảnh đại diện</span>
           <label
-            htmlFor="btnUpload"
+            htmlFor="btnUploadUpdateUser"
             style={{
               display: "block",
               width: "fit-content",
@@ -158,7 +158,7 @@ const UpdateUserModal = (props) => {
           <input
             type="file"
             hidden
-            id="btnUpload"
+            id="btnUploadUpdateUser"
             onChange={(event) => handleOnChangeFile(event)}
             onClick={(event) => {
               event.target.value = null;

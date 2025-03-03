@@ -219,7 +219,7 @@ const UpdateBookModal = (props) => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span>Ảnh Thumbnail</span>
           <label
-            htmlFor="btnUpload"
+            htmlFor="btnUploadUpdateBook"
             style={{
               display: "block",
               width: "fit-content",
@@ -235,7 +235,7 @@ const UpdateBookModal = (props) => {
           <input
             type="file"
             hidden
-            id="btnUpload"
+            id="btnUploadUpdateBook"
             onChange={(event) => handleOnChangeFile(event)}
             onClick={(event) => {
               event.target.value = null;
