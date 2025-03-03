@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchAllBookAPI } from "../services/api.service";
 import BookTable from "../components/book/book.table";
+import CreateBookForm from "../components/book/create.book.form";
 
 const BookPage = () => {
   const [dataBooks, setDataBooks] = useState([]);
@@ -25,6 +26,7 @@ const BookPage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      <CreateBookForm loadBook={loadBook} />
       <BookTable
         dataBooks={dataBooks}
         current={current}
