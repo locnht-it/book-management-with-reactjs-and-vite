@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchAllUserAPI } from "../services/api.service";
 import UserTable from "../components/user/user.table";
+import CreateUserModal from "../components/user/create.user.modal";
 
 const UserPage = () => {
   const [dataUsers, setDataUsers] = useState([]);
@@ -25,6 +26,7 @@ const UserPage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      <CreateUserModal loadUser={loadUser} />
       <UserTable
         dataUsers={dataUsers}
         current={current}

@@ -71,6 +71,17 @@ const fetchAllUserAPI = (current, pageSize) => {
   return axios.get(URL_BACKEND);
 };
 
+const createUserAPI = (fullName, email, password, phone) => {
+  const URL_BACKEND = `/api/v1/user`;
+  const data = {
+    fullName: fullName,
+    email: email,
+    password: password,
+    phone: phone,
+  };
+  return axios.post(URL_BACKEND, data);
+};
+
 export {
   fetchAllBookAPI,
   handleUploadFileAPI,
@@ -78,4 +89,5 @@ export {
   updateBookAPI,
   deleteBookAPI,
   fetchAllUserAPI,
+  createUserAPI,
 };

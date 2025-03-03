@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchAllBookAPI } from "../services/api.service";
 import BookTable from "../components/book/book.table";
-import CreateBookModal from "../components/book/create.book.form";
+import CreateBookModal from "../components/book/create.book.modal";
 
 const BookPage = () => {
   const [dataBooks, setDataBooks] = useState([]);
