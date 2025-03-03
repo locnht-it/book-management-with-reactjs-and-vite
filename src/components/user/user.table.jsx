@@ -1,8 +1,9 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { notification, Popconfirm, Table } from "antd";
 import { useState } from "react";
 import ViewUserDetail from "./view.user.detail";
 import UpdateUserModal from "./update.user.modal";
+import { deleteUserAPI } from "../../services/api.service";
 
 const UserTable = (props) => {
   const [dataDetail, setDataDetail] = useState(null);
@@ -10,6 +11,8 @@ const UserTable = (props) => {
 
   const [dataUpdate, setDataUpdate] = useState(null);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const {
     dataUsers,
@@ -36,7 +39,23 @@ const UserTable = (props) => {
     }
   };
 
-  const handleDeleteUser = async (id) => {};
+  const handleDeleteUser = async (id) => {
+    setDeleteLoading(true);
+    const res = await deleteUserAPI(id);
+    if (res.data) {
+      notification.success({
+        message: "Xoá người dùng",
+        description: "Xóa người dùng thành công",
+      });
+      await loadUser();
+    } else {
+      notification.error({
+        message: "Xoá người dùng không thành công",
+        description: JSON.stringify(res.message),
+      });
+    }
+    setDeleteLoading(false);
+  };
 
   const columns = [
     {
@@ -82,7 +101,17 @@ const UserTable = (props) => {
               setIsModalUpdateOpen(true);
             }}
           />
-          <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+          <Popconfirm
+            title="Xóa người dùng"
+            description="Bạn chắc chắn xóa người dùng này chứ?"
+            onConfirm={() => handleDeleteUser(record._id)}
+            okText="Có"
+            cancelText="Không"
+            placement="left"
+            okButtonProps={{ loading: deleteLoading }}
+          >
+            <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+          </Popconfirm>
         </div>
       ),
     },
