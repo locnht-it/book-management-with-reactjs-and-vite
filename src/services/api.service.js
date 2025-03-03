@@ -98,6 +98,20 @@ const deleteUserAPI = (id) => {
   return axios.delete(URL_BACKEND);
 };
 
+const loginAPI = (email, password) => {
+  const URL_BACKEND = `/api/v1/auth/login`;
+  const data = {
+    username: email,
+    password: password,
+  };
+  return axios.post(URL_BACKEND, data);
+};
+
+const logoutAPI = () => {
+  const URL_BACKEND = `/api/v1/auth/logout`;
+  return axios.post(URL_BACKEND);
+};
+
 export {
   fetchAllBookAPI,
   handleUploadFileAPI,
@@ -108,4 +122,6 @@ export {
   createUserAPI,
   updateUserAPI,
   deleteUserAPI,
+  loginAPI,
+  logoutAPI,
 };
