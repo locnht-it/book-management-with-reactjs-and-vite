@@ -1,7 +1,12 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Table } from "antd";
+import { useState } from "react";
+import ViewBookDetail from "./view.book.detail";
 
 const BookTable = (props) => {
+  const [dataDetail, setDataDetail] = useState(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
   const {
     dataBooks,
     current,
@@ -38,7 +43,17 @@ const BookTable = (props) => {
       title: "Id",
       dataIndex: "_id",
       render: (_, record) => {
-        return <a href="#">{record._id}</a>;
+        return (
+          <a
+            href="#"
+            onClick={() => {
+              setDataDetail(record);
+              setIsDetailOpen(true);
+            }}
+          >
+            {record._id}
+          </a>
+        );
       },
     },
     {
@@ -97,6 +112,12 @@ const BookTable = (props) => {
         }}
         onChange={onChange}
         loading={loadingTable}
+      />
+      <ViewBookDetail
+        dataDetail={dataDetail}
+        setDataDetail={setDataDetail}
+        isDetailOpen={isDetailOpen}
+        setIsDetailOpen={setIsDetailOpen}
       />
     </>
   );
