@@ -1,44 +1,29 @@
-import {
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  notification,
-  Row,
-  Select,
-} from "antd";
+import { Form, Input, Modal, notification } from "antd";
 import { useEffect, useState } from "react";
-import { handleUploadFileAPI, updateBookAPI } from "../../services/api.service";
+import { handleUploadFileAPI, updateUserAPI } from "../../services/api.service";
 
-const UpdateBookModal = (props) => {
+const UpdateUserModal = (props) => {
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const {
     dataUpdate,
     setDataUpdate,
     isModalUpdateOpen,
     setIsModalUpdateOpen,
-    loadBook,
+    loadUser,
   } = props;
 
   useEffect(() => {
     if (dataUpdate && dataUpdate._id) {
       form.setFieldsValue({
         id: dataUpdate._id,
-        mainText: dataUpdate.mainText,
-        author: dataUpdate.author,
-        price: dataUpdate.price,
-        quantity: dataUpdate.quantity,
-        category: dataUpdate.category,
+        fullName: dataUpdate.fullName,
+        phone: dataUpdate.phone,
       });
       setPreview(
-        `${import.meta.env.VITE_BACKEND_URL}/images/book/${
-          dataUpdate.thumbnail
-        }`
+        `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataUpdate.avatar}`
       );
     }
   }, [dataUpdate]);
@@ -59,56 +44,47 @@ const UpdateBookModal = (props) => {
   const handleSubmitBtn = async (values) => {
     if (!selectedFile && !preview) {
       notification.error({
-        message: "Cập nhật sách không thành công",
-        description: "Vui lòng upload ảnh thumbnail",
+        message: "Cập nhật người dùng không thành công",
+        description: "Vui lòng upload ảnh đại diện",
       });
       return;
     }
 
     setLoading(true);
 
-    let newThumbnail = "";
+    let newAvatar = "";
     if (!selectedFile && preview) {
-      newThumbnail = dataUpdate.thumbnail;
+      newAvatar = dataUpdate.avatar;
     } else {
-      const resUpload = await handleUploadFileAPI(selectedFile, "book");
+      const resUpload = await handleUploadFileAPI(selectedFile, "avatar");
       if (resUpload.data) {
-        newThumbnail = resUpload.data.fileUploaded;
+        newAvatar = resUpload.data.fileUploaded;
       } else {
         notification.error({
-          message: "Upload ảnh thumbnail không thành công",
+          message: "Upload ảnh đại diện không thành công",
           description: JSON.stringify(resUpload.message),
         });
         return;
       }
     }
 
-    await updateBook(newThumbnail, values);
+    await updateUser(newAvatar, values);
     setLoading(false);
   };
 
-  const updateBook = async (newThumbnail, values) => {
-    const { id, mainText, author, price, quantity, category } = values;
-    console.log(`>>> Check values: `, id);
-    const res = await updateBookAPI(
-      id,
-      newThumbnail,
-      mainText,
-      author,
-      price,
-      quantity,
-      category
-    );
+  const updateUser = async (newAvatar, values) => {
+    const { id, fullName, phone } = values;
+    const res = await updateUserAPI(id, fullName, phone, newAvatar);
     if (res.data) {
       notification.success({
-        message: "Cập nhật sách",
-        description: "Cập nhật sách thành công",
+        message: "Cập nhật người dùng",
+        description: "Cập nhật người dùng thành công",
       });
       resetAndCloseModal();
-      await loadBook();
+      await loadUser();
     } else {
       notification.error({
-        message: "Cập nhật sách không thành công",
+        message: "Cập nhật người dùng không thành công",
         description: JSON.stringify(res.message),
       });
     }
@@ -124,7 +100,7 @@ const UpdateBookModal = (props) => {
 
   return (
     <Modal
-      title="Cập nhật sách"
+      title="Cập nhật người dùng"
       open={isModalUpdateOpen}
       onOk={() => form.submit()}
       onCancel={() => resetAndCloseModal()}
@@ -139,12 +115,12 @@ const UpdateBookModal = (props) => {
         </Form.Item>
         <Form.Item
           style={{ width: "100%" }}
-          label="Tiêu đề"
-          name="mainText"
+          label="Họ và tên"
+          name="fullName"
           rules={[
             {
               required: true,
-              message: "Vui lòng nhập tiêu đề!",
+              message: "Vui lòng nhập họ và tên!",
             },
           ]}
         >
@@ -152,72 +128,19 @@ const UpdateBookModal = (props) => {
         </Form.Item>
         <Form.Item
           style={{ width: "100%" }}
-          label="Tác giả"
-          name="author"
+          label="Số điện thoại"
+          name="phone"
           rules={[
             {
               required: true,
-              message: "Vui lòng nhập tên tác giả",
+              message: "Vui lòng nhập số điện thoại!",
             },
           ]}
         >
           <Input />
-        </Form.Item>
-        <Form.Item
-          style={{ width: "100%" }}
-          label="Giá tiền"
-          name="price"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập giá tiền",
-            },
-          ]}
-        >
-          <InputNumber addonAfter={`đ`} style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          style={{ width: "100%" }}
-          label="Số lượng"
-          name="quantity"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập số lượng",
-            },
-          ]}
-        >
-          <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          style={{ width: "100%" }}
-          label="Thể loại"
-          name="category"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn thể loại",
-            },
-          ]}
-        >
-          <Select
-            style={{ width: "100%" }}
-            options={[
-              { value: "Arts", label: "Arts" },
-              { value: "Business", label: "Business" },
-              { value: "Comics", label: "Comics" },
-              { value: "Cooking", label: "Cooking" },
-              { value: "Entertainment", label: "Entertainment" },
-              { value: "History", label: "History" },
-              { value: "Music", label: "Music" },
-              { value: "Sports", label: "Sports" },
-              { value: "Teen", label: "Teen" },
-              { value: "Travel", label: "Travel" },
-            ]}
-          />
         </Form.Item>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <span>Ảnh Thumbnail</span>
+          <span>Ảnh đại diện</span>
           <label
             htmlFor="btnUpload"
             style={{
@@ -253,11 +176,7 @@ const UpdateBookModal = (props) => {
             }}
           >
             <img
-              style={{
-                height: "100%",
-                width: "100%",
-                objectFit: "contain",
-              }}
+              style={{ height: "100%", width: "100%", objectFit: "contain" }}
               src={preview}
             />
           </div>
@@ -266,5 +185,4 @@ const UpdateBookModal = (props) => {
     </Modal>
   );
 };
-
-export default UpdateBookModal;
+export default UpdateUserModal;

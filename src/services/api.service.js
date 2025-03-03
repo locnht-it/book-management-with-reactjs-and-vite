@@ -82,6 +82,17 @@ const createUserAPI = (fullName, email, password, phone) => {
   return axios.post(URL_BACKEND, data);
 };
 
+const updateUserAPI = (_id, fullName, phone, avatar) => {
+  const URL_BACKEND = `/api/v1/user`;
+  const data = {
+    _id: _id,
+    fullName: fullName,
+    phone: phone,
+    avatar: avatar,
+  };
+  return axios.put(URL_BACKEND, data);
+};
+
 export {
   fetchAllBookAPI,
   handleUploadFileAPI,
@@ -90,4 +101,5 @@ export {
   deleteBookAPI,
   fetchAllUserAPI,
   createUserAPI,
+  updateUserAPI,
 };
