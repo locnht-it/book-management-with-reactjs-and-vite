@@ -2,10 +2,14 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { useState } from "react";
 import ViewBookDetail from "./view.book.detail";
+import UpdateBookModal from "./update.book.modal";
 
 const BookTable = (props) => {
   const [dataDetail, setDataDetail] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const [dataUpdate, setDataUpdate] = useState(null);
+  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
 
   const {
     dataBooks,
@@ -84,7 +88,13 @@ const BookTable = (props) => {
       key: "action",
       render: (_, record) => (
         <div style={{ display: "flex", gap: "20px" }}>
-          <EditOutlined style={{ cursor: "pointer", color: "orange" }} />
+          <EditOutlined
+            style={{ cursor: "pointer", color: "orange" }}
+            onClick={() => {
+              setDataUpdate(record);
+              setIsModalUpdateOpen(true);
+            }}
+          />
           <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
         </div>
       ),
@@ -118,6 +128,13 @@ const BookTable = (props) => {
         setDataDetail={setDataDetail}
         isDetailOpen={isDetailOpen}
         setIsDetailOpen={setIsDetailOpen}
+      />
+      <UpdateBookModal
+        dataUpdate={dataUpdate}
+        setDataUpdate={setDataUpdate}
+        isModalUpdateOpen={isModalUpdateOpen}
+        setIsModalUpdateOpen={setIsModalUpdateOpen}
+        loadBook={loadBook}
       />
     </>
   );

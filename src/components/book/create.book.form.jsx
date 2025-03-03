@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { createBookAPI, handleUploadFileAPI } from "../../services/api.service";
 
-const CreateBookForm = (props) => {
+const CreateBookModal = (props) => {
   const { loadBook } = props;
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -236,4 +236,4 @@ const CreateBookForm = (props) => {
   );
 };
 
-export default CreateBookForm;
+export default CreateBookModal;
