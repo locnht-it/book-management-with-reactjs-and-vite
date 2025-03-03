@@ -61,4 +61,15 @@ const updateBookAPI = (
   return axios.put(URL_BACKEND, data);
 };
 
-export { fetchAllBookAPI, handleUploadFileAPI, createBookAPI, updateBookAPI };
+const deleteBookAPI = (id) => {
+  const URL_BACKEND = `/api/v1/book/${id}`;
+  return axios.delete(URL_BACKEND);
+};
+
+export {
+  fetchAllBookAPI,
+  handleUploadFileAPI,
+  createBookAPI,
+  updateBookAPI,
+  deleteBookAPI,
+};

@@ -1,8 +1,9 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { notification, Popconfirm, Table } from "antd";
 import { useState } from "react";
 import ViewBookDetail from "./view.book.detail";
 import UpdateBookModal from "./update.book.modal";
+import { deleteBookAPI } from "../../services/api.service";
 
 const BookTable = (props) => {
   const [dataDetail, setDataDetail] = useState(null);
@@ -10,6 +11,8 @@ const BookTable = (props) => {
 
   const [dataUpdate, setDataUpdate] = useState(null);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const {
     dataBooks,
@@ -34,6 +37,24 @@ const BookTable = (props) => {
         setPageSize(+pagination.pageSize);
       }
     }
+  };
+
+  const handleDeleteBook = async (id) => {
+    setLoading(true);
+    const res = await deleteBookAPI(id);
+    if (res.data) {
+      notification.success({
+        message: "Xóa sách",
+        description: "Xóa sách thành công",
+      });
+      await loadBook();
+    } else {
+      notification.error({
+        message: "Xóa sách không thành công",
+        description: JSON.stringify(res.message),
+      });
+    }
+    setLoading(false);
   };
 
   const columns = [
@@ -95,7 +116,17 @@ const BookTable = (props) => {
               setIsModalUpdateOpen(true);
             }}
           />
-          <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+          <Popconfirm
+            title="Xóa sách"
+            description="Bạn chắc chắn xóa quyển sách này chứ?"
+            onConfirm={() => handleDeleteBook(record._id)}
+            okText="Có"
+            cancelText="Không"
+            placement="left"
+            okButtonProps={{ loading: loading }}
+          >
+            <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+          </Popconfirm>
         </div>
       ),
     },
